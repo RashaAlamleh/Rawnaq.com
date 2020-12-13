@@ -18,6 +18,10 @@
   <!-- Your custom styles (optional) -->
   <link href=" {% static 'css/style.min.css' %}" rel="stylesheet">
   <style type="text/css">
+  body{
+      background: linear-gradient(to bottom, black, white);
+      background-attachment: fixed; 
+  }
     html,
     body,
     header,
@@ -48,10 +52,10 @@
   </style>
 </head>
 
-<body>
+<body >
 
   <!-- Navbar -->
-  <nav class="navbar fixed-top navbar-expand-lg navbar-light green scrolling-navbar">
+  <nav class="navbar fixed-top navbar-expand-lg navbar-light green bg-success scrolling-navbar">
     <div class="container">
 
       <!-- Brand -->
@@ -99,7 +103,7 @@
             </li>
             {% else %}
              </li class="nav-item">
-                <a class="nav-link waves-effect" href="{% url 'login' %}"> login</a>
+                <a class="nav-link waves-effect btn-lg btn-dark"  style="color: white;" href="{% url 'login' %}"> login</a>
             </li>
             {% endif %}
         </ul>

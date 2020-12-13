@@ -207,8 +207,13 @@
 
               <!--Card image-->
               <div class="view overlay">
-                <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="card-img-top"
-                  alt="">
+        <span id='photo'> </span>
+<script> 
+var rand=Math.floor(Math.random()*15);
+if(rand>15 || rand<1)rand=1;
+document.getElementById("photo").innerHTML='<img width="100%"  src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/'+rand+'.jpg" class="rounded-circle" alt="">'
+          
+</script>
                 <a href="{{ item.get_absolute_url }}">
                   <div class="mask rgba-white-slight"></div>
                 </a>

@@ -11,8 +11,13 @@
 
         <!--Grid column-->
         <div class="col-md-6 mb-4">
-
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="img-fluid" alt="">
+        <span id='photo'> </span>
+<script> 
+var rand=Math.floor(Math.random()*15);
+if(rand>15 || rand<1)rand=1;
+document.getElementById("photo").innerHTML='<img width="400px" height="400px" src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/'+rand+'.jpg" class="rounded-circle" alt="">'
+          
+</script>
 
         </div>
         <!--Grid column-->
@@ -58,7 +63,7 @@
 
             </form> {% endcomment %}
 
-            <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p" >Add to cart
+            <a href="{{ object.get_add_to_cart_url }}" class="btn btn-warning btn-md my-0 p" >Add to cart
                 <i class="fas fa-shopping-cart ml-1"></i>
             </a>
             <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p" >Remove From cart
