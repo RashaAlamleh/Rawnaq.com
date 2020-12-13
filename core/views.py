@@ -2,18 +2,35 @@ from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.utils import timezone
-from .models import (
-    Item,
-    Order,
-    OrderItem
-)
+from django.contrib.auth.models import User
+from django.contrib.auth import views
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from .models import (Item, Order, OrderItem)
 # Create your views here.
+
+# @login_required
+def index(request):
+    return render(request,'../templates/registration/index.html')
+def sign_up(request):
+    context = {}
+    form = UserCreationForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            user = form.save()
+            login(request,user)
+            # login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            return render(request,'../templates/registration/index.html') 
+    context['form']=form
+    return render(request,'../templates/registration/sign_up.html',context) 
+    
+
 
 
 class HomeView(ListView):
     model = Item
     template_name = "home.html"
-
 
 class ProductView(DetailView) :
     model = Item
