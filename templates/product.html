@@ -11,13 +11,8 @@
 
         <!--Grid column-->
         <div class="col-md-6 mb-4">
-        <span id='photo'> </span>
-<script> 
-var rand=Math.floor(Math.random()*15);
-if(rand>15 || rand<1)rand=1;
-document.getElementById("photo").innerHTML='<img width="400px" height="400px" src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/'+rand+'.jpg" class="rounded-circle" alt="">'
-          
-</script>
+
+          <img src="https://www.artofbrilliance.co.uk/wp-content/uploads/2019/02/happy-tshirt-1.jpg" class="img-fluid" alt="">
 
         </div>
         <!--Grid column-->
@@ -63,7 +58,7 @@ document.getElementById("photo").innerHTML='<img width="400px" height="400px" sr
 
             </form> {% endcomment %}
 
-            <a href="{{ object.get_add_to_cart_url }}" class="btn btn-warning btn-md my-0 p" >Add to cart
+            <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p" >Add to cart
                 <i class="fas fa-shopping-cart ml-1"></i>
             </a>
             <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p" >Remove From cart
@@ -82,7 +77,7 @@ document.getElementById("photo").innerHTML='<img width="400px" height="400px" sr
       <hr>
 
       <!--Grid row-->
-      <div class="row d-flex justify-content-center wow fadeIn">
+      {% comment %} <div class="row d-flex justify-content-center wow fadeIn"> {% endcomment %}
 
         <!--Grid column-->
         {% comment %} <div class="col-md-6 text-center">
@@ -96,7 +91,7 @@ document.getElementById("photo").innerHTML='<img width="400px" height="400px" sr
         </div> {% endcomment %}
         <!--Grid column-->
 
-      </div>
+      {% comment %} </div> {% endcomment %}
       <!--Grid row-->
 
       <!--Grid row-->
