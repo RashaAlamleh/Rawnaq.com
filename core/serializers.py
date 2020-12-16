@@ -31,3 +31,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(validated_data['username'], validated_data['email'], validated_data['password'])
 
         return user
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ['itemName','details', 'price','image','quantity','category']
