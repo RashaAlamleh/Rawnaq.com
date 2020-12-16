@@ -1,3 +1,22 @@
+/* body {
+  font-family: 'Open Sans Condensed';
+  padding:20px 60px;
+  /* background-color:cyan !important ; */
+  /* background-image: url("https://image.shutterstock.com/image-vector/shopping-online-mobile-phone-vector-600w-1111564421.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+} */
+
+
+/* a{
+  text-decoration:none;
+  color:black;
+} */
+
+/* *{
+  box-sizing:border-box;
+} */ 
+
 .App {
   text-align: center;
 }
@@ -36,3 +55,8 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+
+

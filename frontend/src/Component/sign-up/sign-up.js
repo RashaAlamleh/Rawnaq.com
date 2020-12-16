@@ -3,6 +3,7 @@ import Form from '../form/form.js';
 import Button from '../buttom/buttom.js';
 import {auth,createUserProfileDocument} from '../../firebase/firebase.utils.js';
 import './sign-up.styles.scss';
+import { Redirect } from 'react-router-dom';
 // import { connect } from 'react-redux';
 // import { Link, Redirect } from 'react-router-dom';
 
@@ -10,7 +11,7 @@ class SignUp extends React.Component{
     constructor(){
         super();
         this.state={
-            displayName:'',
+          username:'',
             email:'',
             password:'',
             confirmPassword:''
@@ -19,7 +20,7 @@ class SignUp extends React.Component{
     handleSubmit = async event => {
         event.preventDefault();
     
-        const { displayName, email, password, confirmPassword } = this.state;
+        const { username, email, password, confirmPassword } = this.state;
     
         if (password !== confirmPassword) {
           alert("passwords don't match");
@@ -31,10 +32,10 @@ class SignUp extends React.Component{
               password
             );
       
-            await createUserProfileDocument(user, { displayName });
+            await createUserProfileDocument(user, { username });
       
             this.setState({
-              displayName: '',
+              username: '',
               email: '',
               password: '',
               confirmPassword: ''
@@ -50,11 +51,29 @@ class SignUp extends React.Component{
           this.setState({ [name]: value });
     }
     
-
+    postdata = (event)=>{
+      event.preventDefault()
+      const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(this.state)
+      };
+      fetch('http://127.0.0.1:8000/accounts/sign_up/', requestOptions)
+          .then(response => response.json())
+          .then(data => {
+              console.log('allpostdata = ',data)
+             
+              this.setState({ username:"",email:"",password:"",confirmPassword:""})
+              // console.log(data)
+              
+              localStorage.setItem('auth',data.token)
+              this.setState({ redirect: "/Signin" });
+          });
+}
 
 
     render(){
-        const{displayName,email,password,confirmPassword}=this.state;
+        const{username,email,password,confirmPassword}=this.state;
       //   if (this.state.redirect) {
       //     return <Redirect to="/signin" />
       // } else {
@@ -65,8 +84,8 @@ class SignUp extends React.Component{
                 <form className='sign-up-form' onSubmit={this.handleSubmit}>
           <Form
             type='text'
-            name='displayName'
-            value={displayName}
+            name='username'
+            value={username}
             onChange={this.handleChange}
             label='Display Name'
             required
@@ -95,7 +114,7 @@ class SignUp extends React.Component{
             label='Confirm Password'
             required
           />
-          <Button type='submit'>SIGN UP</Button>
+          <Button onClick={this.postdata} type='submit'>SIGN UP</Button>
         </form>
 
             </div>
