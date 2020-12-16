@@ -16,7 +16,6 @@ class AddProduct extends Component {
         super(props);
         this.state = initState;
     }
-
     save = async (e) => {
         e.preventDefault();
         const { name, price, stock, shortDesc, description } = this.state;
