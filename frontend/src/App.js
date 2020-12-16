@@ -4,6 +4,10 @@ import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Footer from './Component/Footer/Footer.js';
+//import { useRef, useState } from "react";
+//import { useForm } from "react-hook-form";
+//import ReCAPTCHA from "react-google-recaptcha";
+//import SignIn from './Component/SignIn';
 import HomePage from './pages/homepage/homepage.js';
 import ShopPage from './pages/shop/shop.js';
 import Header from './Component/header/header';
@@ -13,6 +17,16 @@ import {connect} from 'react-redux';
 import {setCurrentUser} from './redux/user/user.actions';
 import signUP from './Component/sign-up/sign-up';
 import SignIn from './Component/sign-in/sign-in';
+
+
+
+//
+// const HatsPage=()=>(
+//   <div> 
+//     <h1>MY HATS PAGE </h1>
+//   </div>
+// );
+
 
 
 class App extends React.Component {
@@ -50,7 +64,8 @@ componentWillUnmount(){
         <Route exact path='/shop' component={ShopPage} />
         <Route exact path='/signup' component={signUP} />
         <Route exact path='/SignIn'  render={()=>this.props.currentUser?(<Redirect to='/'/>):(<SignInandUp/>)} />
-        <Route exact path='/SignIn' component={SignIn}  />
+
+        {/* <Route exact path='/SignIn' component={SignIn}  /> */}
         </Switch>
         <Footer />
   
