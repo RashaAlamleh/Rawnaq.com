@@ -2,6 +2,15 @@ from django.conf import settings
 from django.db import models
 from django.shortcuts import reverse
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    stripe_customer_id = models.CharField(max_length=50, blank=True, null=True)
+    one_click_purchasing = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user
+
 CATEGORY = (
     ('S', 'Shirt'),
     ('SP', 'Sport Wear'),
@@ -16,7 +25,6 @@ LABEL = (
 class Item(models.Model) :
     item_name = models.CharField(max_length=100)
     price = models.FloatField()
-    # discount_price = models.FloatField(blank=True, null=True)
     category = models.CharField(choices=CATEGORY, max_length=2)
     label = models.CharField(choices=LABEL, max_length=2)
     description = models.TextField()
@@ -41,7 +49,6 @@ class Item(models.Model) :
         })
     
     
-
 class OrderItem(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
