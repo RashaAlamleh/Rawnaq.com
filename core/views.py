@@ -1,3 +1,4 @@
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,10 +8,26 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.contrib.auth import views
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import (Item, Order, OrderItem)
-# Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+
+from rest_framework import generics, permissions
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.generics import (ListAPIView, RetrieveAPIView, CreateAPIView,UpdateAPIView)
+from knox.models import AuthToken
+from knox.views import LoginView as KnoxLoginView
+
+from . serializers import *
+from .models import *
+from .forms import CheckoutForm
+
+
 
 # @login_required
 def index(request):
@@ -26,10 +43,42 @@ def sign_up(request):
             return render(request,'../templates/registration/index.html') 
     context['form']=form
     return render(request,'../templates/registration/sign_up.html',context) 
+
     
 class HomeView(ListView):
     model = Item
     template_name = "home.html"
+
+class UserProfileView(APIView):
+    def get(self, request, *args, **kwargs):
+        return Response({"user","stripe_customer_id"})
+        
+class ItemListView(ListAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = ItemSerializer
+    queryset = Item.objects.all()
+
+class RegisterAPI(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+        "user": UserSerializer(user, context=self.get_serializer_context()).data,
+        "token": AuthToken.objects.create(user)[1]
+        })
+
+class LoginAPI(KnoxLoginView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        serializer = AuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request, user)
+        return super(LoginAPI, self).post(request, format=None)
 
 class ProductView(DetailView) :
     model = Item
@@ -136,3 +185,44 @@ def reduce_quantity_item(request, pk):
         #add message doesnt have order
         messages.info(request, "You do not have an Order")
         return redirect("core:order-summary")
+
+
+class CheckoutView(View):
+    def get(self, *args, **kwargs):
+        form = CheckoutForm()
+        context = {
+            'form': form
+        }
+        return render(self.request, 'checkout.html', context)
+
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            if form.is_valid():
+                street_address = form.cleaned_data.get('street_address')
+                apartment_address = form.cleaned_data.get('apartment_address')
+                country = form.cleaned_data.get('country')
+                zip = form.cleaned_data.get('zip')
+                same_billing_address = form.cleaned_data.get('same_billing_address')
+                save_info = form.cleaned_data.get('save_info')
+                payment_option = form.cleaned_data.get('payment_option')
+
+                checkout_address = CheckoutAddress(
+                    user=self.request.user,
+                    street_address=street_address,
+                    apartment_address=apartment_address,
+                    country=country,
+                    zip=zip
+                )
+                checkout_address.save()
+                order.checkout_address = checkout_address
+                order.save()
+                return redirect('core:checkout')
+            messages.warning(self.request, "Failed Chekout")
+            return redirect('core:checkout')
+
+        except ObjectDoesNotExist:
+            messages.error(self.request, "You do not have an order")
+            return redirect("core:order-summary")

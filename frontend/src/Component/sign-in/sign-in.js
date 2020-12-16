@@ -21,7 +21,7 @@ class SignIn extends React.Component {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(this.state)
             };
-            fetch('http://127.0.0.1:8000/accounts/login/', requestOptions)
+            fetch('http://127.0.0.1:8000/api/login/', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     console.log('allpostdata',data)
