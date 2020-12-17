@@ -170,3 +170,5 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 SIGNUP_REDIRECT_URL = '/'
+
+STRIPE_KEY = '<your_api_key_here>'

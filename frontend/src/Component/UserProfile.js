@@ -105,7 +105,6 @@ render(){
     )
 }
 }
-
 const mapStatetoProps=(state)=>{
     return{
         user_id:state.user.userDetails.userid,
